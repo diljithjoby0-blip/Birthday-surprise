@@ -151,7 +151,7 @@
         <div id="page-intro" class="page-section">
             <div class="container">
                 <p style="font-size: 1.5em;">Enter your name 💖</p>
-                <input id="name-input" type="text" placeholder="e.g., Emily" />
+                <input id="name-input" type="text" placeholder="e.g., Kichu" />
                 <button onclick="goToCandlePage()">Go 🎉</button>
             </div>
         </div>
@@ -160,7 +160,8 @@
             <div class="container">
                 <div id="candle">🕯️</div>
                 <span id="candle-flame">🔥</span>
-                <p id="candle-instruction">Tap to blow out the candle!</p>
+                <p id="candle-instruction">Candle oodhi keduthu😌!
+                    Tap on it!</p>
             </div>
         </div>
 
@@ -168,8 +169,8 @@
             <div class="container">
                 <h1 id="message"></h1>
                 <img id="her-photo" src="herphoto.jpg" alt="Her Photo">
-                <p id="wish-message">Happy 18th Birthday! May all your wishes come true! ✨</p>
-                <button onclick="goToCakePage()">Cut the Cake! 🔪</button>
+                <p id="wish-message">Happy 18 vayasu unniye🥳! Nannayii vaa! ✨</p>
+                <button onclick="goToCakePage()">Cake murichaaloo unniye? 🔪</button>
             </div>
         </div>
 
@@ -177,14 +178,15 @@
             <canvas id="popper-canvas"></canvas>
             <div class="container">
                 <div id="birthday-cake">🎂</div>
-                <p id="wish-text">Make a wish as you cut the cake!</p>
+                <p id="wish-text">Nalla cake aa!
+                    Nale chelavu thannolu tta 😂!</p>
                 <button id="exit-button" onclick="goToFeedbackPage()">Click to Exit</button>
             </div>
         </div>
 
         <div id="page-feedback" class="page-section">
             <div class="container">
-                <p>How was your birthday surprise?</p>
+                <p>How was your birthday surprise😌?</p>
                 <div class="rating" id="rating">
                     <span class="star" data-value="1">★</span>
                     <span class="star" data-value="2">★</span>
@@ -193,7 +195,8 @@
                     <span class="star" data-value="5">★</span>
                 </div>
                 <p id="feedback-message"></p>
-                <p id="thank-you">Thank you for your feedback!</p>
+                <p id="thank-you">Thank you for your feedback!
+                Chelavu thannille koolum panni 😂</p>
             </div>
         </div>
     </div>
@@ -238,7 +241,7 @@
 
         function goToBirthdayPage() {
             showPage('page-birthday');
-            messageText.innerText = `Happy Birthday, ${name}! 🎉`;
+            messageText.innerText = `Sandhosha janmadhinam , ${name}kuttikku! 🎉`;
         }
 
         function goToCakePage() {
