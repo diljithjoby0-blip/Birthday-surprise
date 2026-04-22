@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+        
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Pacifico', cursive;
+            color: white;
+            text-align: center;
+            position: relative;
+            background: #0a0a1a;
+            overflow: hidden;
+        }
+        
+        #background-photo {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; object-fit: cover;
+            z-index: -1;
+        }
+        
+        #main-content {
+            position: relative;
+            z-index: 10;
+            height: 100vh;
+            width: 100%;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .page-section {          
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            box-sizing: border-box;
+        }
+
+        #page-candle { display: flex; }
+
+        .container {
+            padding: 2rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.5);
+            backdrop-filter: blur(10px);
+            max-width: 90%;
+            width: 100%;
+        }
+
+        button {
+            padding: 12px 25px; border: none; border-radius: 20px;
+            background: linear-gradient(45deg, pink, #ff69b4); color: black;
+            font-weight: bold; font-size: 1.1em; cursor: pointer;
+            margin-top: 20px; box-shadow: 0 5px 15px rgba(255, 105, 180, 0.4);
+            transition: transform 0.2s;
+        }
+        
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* --- CANDLE SECTION --- */
+        #candle {
+            font-size: 6em; cursor: pointer; animation: pop 1s forwards;
+            position: relative;
+        }
+        @keyframes pop { from { transform: scale(0); } to { transform: scale(1); } }
+        #candle-flame {
+            position: absolute; top: -10px; left: 50%;
+            transform: translateX(-50%) rotate(-5deg); font-size: 0.5em;
+            animation: candle-flame 1s infinite alternate;
+        }
+        @keyframes candle-flame {
+            from { transform: translateX(-50%) scale(1) rotate(-5deg); opacity: 1; }
+            to { transform: translateX(-50%) scale(1.1) rotate(5deg); opacity: 0.8; }
+        }
+        #candle-instruction {
+            font-size: 1.3em; margin-top: 20px;
+            animation: glow-text 1.5s infinite alternate;
+        }
+        .sub-text {
+            font-size: 0.7em;
+            opacity: 0.7;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* --- BIRTHDAY WISH SECTION --- */
+        #photo {
+            max-width: 50%;
+            max-height: 50vh;
+            height: auto;
+            border-radius: 20px;
+            box-shadow: 0 0 20px #ff69b4, 0 0 40px rgba(255, 105, 180, 0.8);
+            border: 5px solid white;
+            margin-bottom: 15px;
+            animation: pop-up 1s forwards;
+            object-fit: cover;
+        }
+        @keyframes pop-up {
+            from { opacity: 0; transform: scale(0); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        h1 {
+            font-size: 2.5em; animation: glow-text 1.5s infinite alternate;
+            margin-bottom: 15px; text-shadow: 0 0 15px pink;
+        }
+        @keyframes glow-text {
+            from { text-shadow: 0 0 10px pink, 0 0 20px #ff69b4; }
+            to { text-shadow: 0 0 20px yellow, 0 0 30px #ffea00; }
+        }
+
+        /* --- CAKE SECTION --- */
+        #birthday-cake {
+            font-size: 15em; cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .slice {
+            position: absolute; font-size: 3em; opacity: 0;
+            transform: scale(0.5); transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+            pointer-events: none;
+        }
+        .slice.active {
+            opacity: 1; transform: scale(1) rotate(0deg);
+        }
+        #popper-canvas {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; pointer-events: none; z-index: 1;
+        }
+        #wish-text {
+            font-size: 1.3em; margin-top: 20px;
+            line-height: 1.4;
+            animation: glow-text 1.5s infinite alternate;
+        }
+
+        /* --- FEEDBACK SECTION --- */
+        .rating {
+            font-size: 2.5em; cursor: pointer; user-select: none;
+            margin: 15px 0;
+        }
+        .star {
+            color: rgba(255,255,255,0.3); transition: color 0.2s ease, transform 0.2s;
+            display: inline-block;
+        }
+        .star:hover {
+            transform: scale(1.2);
+        }
+        .star.selected {
+            color: yellow;
+            text-shadow: 0 0 10px yellow;
+        }
+        
+        #custom-message-area {
+            display: none; /* Hidden until star is clicked */
+            margin-top: 15px;
+            animation: pop-up 0.5s forwards;
+        }
+        
+        textarea {
+            width: 80%;
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid #ff69b4;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-family: 'Pacifico', cursive;
+            font-size: 1.1em;
+            outline: none;
+            resize: none;
+        }
+        
+        textarea::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        #final-goodbye {
+            display: none;
+            font-size: 1.5em;
+            animation: pop-up 1s forwards;
+        }
+    </style>
+</head>
+<body>
+    <audio id="bg-music" loop></audio>
+    <img id="background-photo" src="bg.jpg" alt="Background Photo">
+    
+    <div id="main-content">
+
+        <div id="page-candle" class="page-section">
+            <div class="container">
+                <div id="candle">🕯️<span id="candle-flame">🔥</span></div>
+                <p id="candle-instruction">Kannadachu oru aagraham vicharichu oothi keduth... ✨<span class="sub-text">(pattillel onnu tap cheytha mathi)</span></p>
+            </div>
+        </div>
+
+        <div id="page-birthday" class="page-section">
+            <div class="container">
+                <h1 id="message"></h1>
+                <img id="photo" src="photo.jpg" alt="Photo">
+                <p id="wish-message" style="font-size: 1.4em; margin-top: 10px;">Happy Birthday Kunjiii❤️!✨</p>
+                <button onclick="goToCakePage()">Ini alpam madhuram aakam? ✨</button>
+            </div>
+        </div>
+
+        <div id="page-cake" class="page-section">
+            <canvas id="popper-canvas"></canvas>
+            <div class="container">
+                <div id="birthday-cake">🎂</div>
+                <p id="wish-text">Nee chirikumbo ulla aa bhangi...<br>ath ennum undavan aashamsikunnu, Happy birthday 💫</p>
+                <button id="exit-button" onclick="goToFeedbackPage()">Oru cheriya kaaryam koodi...</button>
+            </div>
+        </div>
+
+        <div id="page-feedback" class="page-section">
+            <div class="container" id="feedback-container">
+                <p id="feedback-prompt" style="font-size: 1.2em;">Our little surprise is almost over... how was it? ishtapetto 👀</p>
+                
+                <div class="rating" id="rating">
+                    <span class="star" data-value="1">★</span>
+                    <span class="star" data-value="2">★</span>
+                    <span class="star" data-value="3">★</span>
+                    <span class="star" data-value="4">★</span>
+                    <span class="star" data-value="5">★</span>
+                </div>
+
+                <div id="custom-message-area">
+                    <textarea id="user-message" rows="3" placeholder="Endha thonnunne? Type it here... ✨"></textarea>
+                    <br>
+                    <button id="submit-exit-btn">Send & Exit 💖</button>
+                </div>
+            </div>
+
+            <div class="container" id="final-goodbye">
+                <p>Message sent! ✨</p>
+                <p style="font-size: 0.7em;">You can safely close this tab now. 💫</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const musicSource = "music.mp3";
+        const bgMusic = document.getElementById("bg-music");
+        bgMusic.src = musicSource;
+
+        let poppers = [];
+        let isCutting = false;
+        let lastCutPosition = null;
+        let ratingSent = false;
+        let selectedRatingValue = 0;
+
+        const pages = document.querySelectorAll('.page-section');
+        const popperCanvas = document.getElementById("popper-canvas");
+        const popperCtx = popperCanvas.getContext("2d");
+        const birthdayCake = document.getElementById("birthday-cake");
+        const messageText = document.getElementById("message");
+
+        function showPage(pageId) {
+            pages.forEach(page => page.style.display = 'none');
+            document.getElementById(pageId).style.display = 'flex';
+        }
+
+        function blowOutCandle() {
+            document.getElementById('candle-flame').style.animation = 'none';
+            document.getElementById('candle-flame').style.opacity = '0';
+            bgMusic.play().catch(e => console.log("Music play failed:", e));
+            setTimeout(() => goToBirthdayPage(), 1000);
+        }
+
+        function goToBirthdayPage() {
+            showPage('page-birthday');
+            messageText.innerText = `To the one who makes everything better... ✨`;
+        }
+
+        function goToCakePage() {
+            showPage('page-cake');
+            initPoppers();
+            animatePoppers();
+        }
+        
+        function goToFeedbackPage() {
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+            showPage('page-feedback');
+        }
+
+        function setCanvasSize() {
+            popperCanvas.width = window.innerWidth;
+            popperCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', setCanvasSize);
+        setCanvasSize();
+
+        function initPoppers() {
+            poppers = [];
+            for (let i = 0; i < 200; i++) {
+                poppers.push({
+                    x: Math.random() * popperCanvas.width, y: Math.random() * popperCanvas.height,
+                    size: Math.random() * 8 + 3, color: `hsl(${Math.random() * 360}, 100%, 70%)`,
+                    rotation: Math.random() * 360, speedY: Math.random() * 2 + 1,
+                    speedX: Math.random() * 1 - 0.5, spin: Math.random() * 0.1 - 0.05
+                });
+            }
+        }
+
+        function animatePoppers() {
+            popperCtx.clearRect(0, 0, popperCanvas.width, popperCanvas.height);
+            poppers.forEach(p => {
+                p.y += p.speedY; p.x += p.speedX; p.rotation += p.spin;
+                if (p.y > popperCanvas.height) { p.y = -p.size; p.x = Math.random() * popperCanvas.width; }
+                popperCtx.fillStyle = p.color; popperCtx.save();
+                popperCtx.translate(p.x, p.y); popperCtx.rotate(p.rotation * Math.PI / 180);
+                popperCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                popperCtx.restore();
+            });
+            requestAnimationFrame(animatePoppers);
+        }
+
+        const cakeSection = document.getElementById('page-cake');
+        cakeSection.addEventListener('mousedown', startCutting);
+        cakeSection.addEventListener('touchstart', startCutting);
+        cakeSection.addEventListener('mousemove', cutCake);
+        cakeSection.addEventListener('touchmove', cutCake);
+        cakeSection.addEventListener('mouseup', stopCutting);
+        cakeSection.addEventListener('touchend', stopCutting);
+
+        function startCutting(e) {
+            isCutting = true;
+            cutCake(e);
+        }
+
+        function cutCake(e) {
+            if (!isCutting) return;
+            let clientX, clientY;
+            if (e.touches) { clientX = e.touches[0].clientX; clientY = e.touches[0].clientY; }
+            else { clientX = e.clientX; clientY = e.clientY; }
+            const cakeRect = birthdayCake.getBoundingClientRect();
+            if (clientX >= cakeRect.left && clientX <= cakeRect.right &&
+                clientY >= cakeRect.top && clientY <= cakeRect.bottom) {
+                if (!lastCutPosition || Math.abs(clientX - lastCutPosition.x) > 20 || Math.abs(clientY - lastCutPosition.y) > 20) {
+                    const slice = document.createElement('span');
+                    slice.className = 'slice';
+                    slice.innerHTML = '🍰';
+                    const containerRect = cakeSection.getBoundingClientRect();
+                    slice.style.left = `${clientX - containerRect.left}px`;
+                    slice.style.top = `${clientY - containerRect.top}px`;
+                    cakeSection.querySelector('.container').appendChild(slice);
+                    setTimeout(() => { slice.classList.add('active'); }, 10);
+                    setTimeout(() => { slice.style.opacity = '0'; slice.style.transform = `scale(0.5) translateY(20px)`; setTimeout(() => slice.remove(), 500); }, 1000);
+                    lastCutPosition = { x: clientX, y: clientY };
+                }
+            } else { stopCutting(); }
+        }
+
+        function stopCutting() {
+            isCutting = false;
+            lastCutPosition = null;
+        }
+
+        document.getElementById('candle').addEventListener('click', blowOutCandle);
+        document.getElementById('candle').addEventListener('touchstart', blowOutCandle);
+
+        // --- EMAIL AUTOMATION & EXIT LOGIC ---
+        const stars = document.querySelectorAll('.star');
+        const customMessageArea = document.getElementById('custom-message-area');
+        const submitExitBtn = document.getElementById('submit-exit-btn');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const finalGoodbye = document.getElementById('final-goodbye');
+        
+        // Key directly embedded
+        const myAccessKey = "38427064-6edf-45e9-8e25-6c9fc7123db0"; 
+
+        // 1. Star Click Logic
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                selectedRatingValue = star.dataset.value;
+                
+                stars.forEach(s => { 
+                    s.classList.remove('selected'); 
+                    if (s.dataset.value <= selectedRatingValue) { s.classList.add('selected'); } 
+                });
+                
+                customMessageArea.style.display = 'block';
+            });
+        });
+
+        // 2. Submit & Exit Logic
+        submitExitBtn.addEventListener('click', () => {
+            const userCustomText = document.getElementById('user-message').value;
+
+            feedbackContainer.style.display = 'none';
+            finalGoodbye.style.display = 'block';
+
+            if (!ratingSent && myAccessKey !== "38427064-6edf-45e9-8e25-6c9fc7123db") {
+                ratingSent = true; 
+                
+                let finalEmailMessage = `She just saw the surprise!\n\nStar Rating: ${selectedRatingValue} out of 5 stars! ✨\n\nHer Message:\n"${userCustomText}"`;
+
+                fetch("https://api.web3forms.com/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                    },
+                    body: JSON.stringify({
+                        access_key: myAccessKey,
+                        subject: "🎂 New Birthday Website Rating & Message!",
+                        message: finalEmailMessage
+                    })
+                })
+                .then(response => console.log("Email triggered!"))
+                .catch(error => console.log("Error:", error));
+            }
+        });
+
+    </script>
+</body>
+</html>
